@@ -7,20 +7,23 @@
  */
 
 require_once 'vendor/autoload.php';
-$simple_key = 'e31be7fff396d8016ff6d52da02dca008f13bf7253e8ca016ff6d52da02dca00';
-$order_api = ultracart\v2\api\OrderApi::usingApiKey($simple_key);
-$expansion = "checkout"; // I need to request any objects using the REST API to contain the 'checkout' submodule because I'm examining the custom fields and they're located in the order/checkout sub class.
-
 
 $json = file_get_contents('php://input');
 $payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name, value=order object.
 
+$simple_key = 'e31be7fff396d8016ff6d52da02dca008f13bf7253e8ca016ff6d52da02dca00';
+$order_api = ultracart\v2\api\OrderApi::usingApiKey($simple_key);
+$expansion = "checkout"; // I need to request any objects using the REST API to contain the 'checkout' submodule because I'm examining the custom fields and they're located in the order/checkout sub class.
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <body>
-
+<pre>
+    <?php echo $json; ?>
+</pre>
+<br>
+<br>
 <pre>
 <?php
 echo "Looping through all events.  They may not all be order_create, so check what type they are.\n";
