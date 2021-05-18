@@ -15,6 +15,16 @@ $simple_key = 'e31be7fff396d8016ff6d52da02dca008f13bf7253e8ca016ff6d52da02dca00'
 $order_api = ultracart\v2\api\OrderApi::usingApiKey($simple_key);
 $expansion = "checkout"; // I need to request any objects using the REST API to contain the 'checkout' submodule because I'm examining the custom fields and they're located in the order/checkout sub class.
 
+/*
+ Sample JSON Payload:
+{
+  "events":[
+    {"order_create":{"merchant_id":"DEMO","order_id":"DEMO-0009104420","current_stage":"Accounts Receivable","creation_dts":"2021-05-18T12:10:19-04:00","language_iso_code":"ENG"}}
+  ]
+}
+
+ */
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +34,7 @@ $expansion = "checkout"; // I need to request any objects using the REST API to 
 </pre>
 <br>
 <pre>
-    <?php var_dump($json); ?>
+    <?php var_dump($payload_obj); ?>
 </pre>
 <br>
 <br>
@@ -35,7 +45,7 @@ foreach ($payload_obj->events as $event) {
     if (isset($event->order_create)) {
         echo "Found order_create event. Loading order object using REST API\n";
         echo "Loading order object using REST API\n";
-        echo "Requesting Order ID " . $event['order_id'] . "\n";
+        echo "Requesting Order ID " . $event->order_id . "\n";
 
         $order_response = $order_api->getOrder($event['order_id'], $expansion);
         $order = $order_response->getOrder();
