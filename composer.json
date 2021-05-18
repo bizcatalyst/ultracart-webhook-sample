@@ -1,14 +1,26 @@
 {
-    "name": "digitalocean-apps/sample-php",
-    "description": "Sample PHP application for App Platform",
+    "name": "perrytew/ultracart-webhook-sample",
+    "description": "Sample PHP application for Digital Ocean App Platform consuming an UltraCart webhook",
     "type": "project",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/ultracart/rest_api_v2_sdk_php.git"
+        }
+    ],
     "require": {
-        "alrik11es/cowsayphp": "^1.2"
+        "alrik11es/cowsayphp": "^1.2",
+        "guzzlehttp/guzzle": "~6.0",
+        "ultracart/rest_api_v2_sdk_php": "*@dev"
     },
     "authors": [
         {
             "name": "Kamal Nasser",
             "email": "kamal@digitalocean.com"
+        },
+        {
+            "name": "Perry Tew",
+            "email": "perry@ultracart.com"
         }
     ]
 }
