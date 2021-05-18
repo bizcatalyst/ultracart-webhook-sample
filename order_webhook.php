@@ -62,7 +62,7 @@ foreach ($payload_obj->events as $event) {
             // do some kind of comparison of custom field 1 and if criteria is met, update custom field 2
             // the default is program A.  If they heard about us from a friend, use program B.
             $my_marketing_program = 'MarketingProgramA';
-            if($checkout_fields->customer_field1 == 'HeardFromFriend'){
+            if($checkout_fields->custom_field1 == 'HeardFromFriend'){
                 echo "Setting some arbitrary value in custom field 2.  This value means something to someone.\n";
                 $my_marketing_program = 'MarketingProgramB';
             }
