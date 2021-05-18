@@ -23,12 +23,12 @@ $payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name
 
 <pre>
 <?php
-echo 'Looping through all events.  They may not all be order_create, so check what type they are.';
+echo "Looping through all events.  They may not all be order_create, so check what type they are.\n";
 foreach ($payload_obj->events as $event) {
     if (isset($event->order_create)) {
-        echo 'Found order_create event. Loading order object using REST API';
-        echo 'Loading order object using REST API';
-        echo 'Requesting Order ID ' . $event->order_id;
+        echo "Found order_create event. Loading order object using REST API\n";
+        echo "Loading order object using REST API\n";
+        echo "Requesting Order ID " . $event->order_id . "\n";
 
         $order_response = $order_api->getOrder($event->order_id, $expansion);
         $order = $order_response->getOrder();
@@ -37,20 +37,20 @@ foreach ($payload_obj->events as $event) {
         if(!empty($checkout_fields->getCustomField1())){
             // do some kind of comparison of custom field 1 and if criteria is met, update custom field 2
             if($checkout_fields->getCustomField1() == 'HeardFromFriend'){
-                echo "Updating order, setting some arbitrary value in custom field 2.  This value means something to someone.";
+                echo "Updating order, setting some arbitrary value in custom field 2.  This value means something to someone.\n";
                 $checkout_fields->setCustomField2('MarketingProgramB');
             } else {
-                echo "Updating order, setting some regular value in custom field 2.  This value means something to someone.";
+                echo "Updating order, setting some regular value in custom field 2.  This value means something to someone.\n";
                 $checkout_fields->setCustomField2('MarketingProgramA');
             }
-            echo "Saving the order back to the server.";
+            echo "Saving the order back to the server.\n";
             $order_api->updateOrder($order, $event->order_id, $expansion);
         } else {
-            echo "There was nothing in custom field 1, so not doing anything with this order.";
+            echo "There was nothing in custom field 1, so not doing anything with this order.\n";
         }
 
     } else {
-        echo 'Event was not order_create, skipping.';
+        echo 'Event was not order_create, skipping.\n';
     }
 
 
