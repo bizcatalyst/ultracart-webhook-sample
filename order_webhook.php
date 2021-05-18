@@ -23,6 +23,10 @@ $expansion = "checkout"; // I need to request any objects using the REST API to 
     <?php echo $json; ?>
 </pre>
 <br>
+<pre>
+    <?php var_dump($json); ?>
+</pre>
+<br>
 <br>
 <pre>
 <?php
