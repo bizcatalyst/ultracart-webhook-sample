@@ -40,6 +40,7 @@ $expansion = "checkout"; // I need to request any objects using the REST API to 
 <br>
 <pre>
 <?php
+
 echo "Looping through all events.  They may not all be order_create, so check what type they are.\n";
 foreach ($payload_obj->events as $event) {
     if (isset($event->order_create)) {
@@ -48,21 +49,32 @@ foreach ($payload_obj->events as $event) {
         echo "Loading order object using REST API\n";
         echo "Requesting Order ID " . $payload_order->order_id . "\n";
 
-        $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
-        $order = $order_response->getOrder();
-        $checkout_fields = $order->getCheckout();
+        // Examine the custom fields in the webhook payload, and IF I need to update the order, pull the order
+        // using REST first, make changes, and then call rest update method.  Do not pass the webhook object
+        // into the rest update method.  Although they are the same object, the serialization methods may differ between
+        // your code and the SDK.  To be safe, always fetch the SDK object for editing.
 
-        if(!empty($checkout_fields->getCustomField1())){
+        $checkout_fields = $payload_order->checkout;
+
+        // if there's nothing in custom field 1, skip it.
+        if(!empty($checkout_fields->custom_field1)){
+
             // do some kind of comparison of custom field 1 and if criteria is met, update custom field 2
-            if($checkout_fields->getCustomField1() == 'HeardFromFriend'){
-                echo "Updating order, setting some arbitrary value in custom field 2.  This value means something to someone.\n";
-                $checkout_fields->setCustomField2('MarketingProgramB');
-            } else {
-                echo "Updating order, setting some regular value in custom field 2.  This value means something to someone.\n";
-                $checkout_fields->setCustomField2('MarketingProgramA');
+            // the default is program A.  If they heard about us from a friend, use program B.
+            $my_marketing_program = 'MarketingProgramA';
+            if($checkout_fields->customer_field1 == 'HeardFromFriend'){
+                echo "Setting some arbitrary value in custom field 2.  This value means something to someone.\n";
+                $my_marketing_program = 'MarketingProgramB';
             }
+
+            // --- Start API section
             echo "Saving the order back to the server.\n";
+            $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
+            $order = $order_response->getOrder();
+            $order->getCheckout()->setCustomField2($my_marketing_program);
             $order_api->updateOrder($order, $payload_order->order_id, $expansion);
+            // --- End API section
+
         } else {
             echo "There was nothing in custom field 1, so not doing anything with this order.\n";
         }
