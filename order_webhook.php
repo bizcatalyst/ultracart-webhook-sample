@@ -6,72 +6,58 @@
  * Time: 1:00 PM
  */
 
+require_once 'vendor/autoload.php';
+$simple_key = 'e31be7fff396d8016ff6d52da02dca008f13bf7253e8ca016ff6d52da02dca00';
+$order_api = ultracart\v2\api\OrderApi::usingApiKey($simple_key);
+$expansion = "checkout"; // I need to request any objects using the REST API to contain the 'checkout' submodule because I'm examining the custom fields and they're located in the order/checkout sub class.
+
+
 $json = file_get_contents('php://input');
-$order_events = json_decode($json);  // array of key-value pairs.  key=event_name, value=order object.
+$payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name, value=order object.
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <body>
 
-<?php foreach ($order_events->events as $event) { ?>
-    <?php if (isset($event->order_create)) { ?>
-        Order Create Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_create, true) ?>
-        </pre>
-    <?php } ?>
+<pre>
+<?php
+echo 'Looping through all events.  There are ' . count($payload_obj->events) . "to examine.  They may not all be order_create, so check what type they are.";
+foreach ($payload_obj->events as $event) {
+    if (isset($event->order_create)) {
+        echo 'Found order_create event. Loading order object using REST API';
+        echo 'Requesting Order ID ' . $event->order_id;
 
-    <?php if (isset($event->order_delete)) { ?>
-        Order Delete Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_delete, true) ?>
-        </pre>
-    <?php } ?>
+        $order_response = $order_api->getOrder($event->order_id, $expansion);
+        $order = $order_response->getOrder();
+        $checkout_fields = $order->getCheckout();
 
-    <?php if (isset($event->order_payment_process)) { ?>
-        Order Payment Process Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_payment_process, true) ?>
-        </pre>
-    <?php } ?>
+        if(!empty($checkout_fields->getCustomField1())){
+            // do some kind of comparison of custom field 1 and if criteria is met, update custom field 2
+            if($checkout_fields->getCustomField1() == 'HeardFromFriend'){
+                echo "Updating order, setting some arbitrary value in custom field 2.  This value means something to someone.";
+                $checkout_fields->setCustomField2('MarketingProgramB');
+            } else {
+                echo "Updating order, setting some regular value in custom field 2.  This value means something to someone.";
+                $checkout_fields->setCustomField2('MarketingProgramA');
+            }
+            echo "Saving the order back to the server.";
+            $order_api->updateOrder($order, $event->order_id, $expansion);
+        } else {
+            echo "There was nothing in custom field 1, so not doing anything with this order.";
+        }
 
-    <?php if (isset($event->order_refund)) { ?>
-        Order Refund Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_refund, true) ?>
-        </pre>
-    <?php } ?>
+    } else {
+        echo 'Event was not order_create, skipping.';
+    }
 
-    <?php if (isset($event->order_reject)) { ?>
-        Order Reject Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_reject, true) ?>
-        </pre>
-    <?php } ?>
 
-    <?php if (isset($event->order_ship)) { ?>
-        Order Ship Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_ship, true) ?>
-        </pre>
-    <?php } ?>
-
-    <?php if (isset($event->order_stage_change)) { ?>
-        Order Stage Change Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_stage_change, true) ?>
-        </pre>
-    <?php } ?>
-
-    <?php if (isset($event->order_update)) { ?>
-        Order Update Event Follows:<br>
-        <pre>
-<?php echo print_r($event->order_update, true) ?>
-        </pre>
-    <?php } ?>
-
-<?php } ?>
-
+}
+?>
+</pre>
+Finished examining webhook events.
+<br>
 
 These are all of the order events.
 <pre>
