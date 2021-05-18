@@ -13,60 +13,60 @@ $order_events = json_decode($json);  // array of key-value pairs.  key=event_nam
 <html lang="en">
 <body>
 
-<?php foreach ($order_events as $order_event) { ?>
-    <?php if (isset($order_event->order_create)) { ?>
+<?php foreach ($order_events->events as $event) { ?>
+    <?php if (isset($event->order_create)) { ?>
         Order Create Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_create, true) ?>
+<?php echo print_r($event->order_create, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_delete)) { ?>
+    <?php if (isset($event->order_delete)) { ?>
         Order Delete Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_delete, true) ?>
+<?php echo print_r($event->order_delete, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_payment_process)) { ?>
+    <?php if (isset($event->order_payment_process)) { ?>
         Order Payment Process Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_payment_process, true) ?>
+<?php echo print_r($event->order_payment_process, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_refund)) { ?>
+    <?php if (isset($event->order_refund)) { ?>
         Order Refund Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_refund, true) ?>
+<?php echo print_r($event->order_refund, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_reject)) { ?>
+    <?php if (isset($event->order_reject)) { ?>
         Order Reject Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_reject, true) ?>
+<?php echo print_r($event->order_reject, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_ship)) { ?>
+    <?php if (isset($event->order_ship)) { ?>
         Order Ship Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_ship, true) ?>
+<?php echo print_r($event->order_ship, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_stage_change)) { ?>
+    <?php if (isset($event->order_stage_change)) { ?>
         Order Stage Change Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_stage_change, true) ?>
+<?php echo print_r($event->order_stage_change, true) ?>
         </pre>
     <?php } ?>
 
-    <?php if (isset($order_event->order_update)) { ?>
+    <?php if (isset($event->order_update)) { ?>
         Order Update Event Follows:<br>
         <pre>
-<?php echo print_r($order_event->order_update, true) ?>
+<?php echo print_r($event->order_update, true) ?>
         </pre>
     <?php } ?>
 
