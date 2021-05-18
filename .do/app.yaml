@@ -1,8 +1,8 @@
-name: sample-php
+name: ultracart-webhook-sample
 services:
 - environment_slug: php
   github:
     branch: master
     deploy_on_push: true
-    repo: digitalocean/sample-php
-  name: sample-php
+    repo: perrytew/ultracart-webhook-sample
+  name: ultracart-sdk
