@@ -23,10 +23,11 @@ $payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name
 
 <pre>
 <?php
-echo 'Looping through all events.  There are ' . count($payload_obj->events) . "to examine.  They may not all be order_create, so check what type they are.";
+echo 'Looping through all events.  They may not all be order_create, so check what type they are.';
 foreach ($payload_obj->events as $event) {
     if (isset($event->order_create)) {
         echo 'Found order_create event. Loading order object using REST API';
+        echo 'Loading order object using REST API';
         echo 'Requesting Order ID ' . $event->order_id;
 
         $order_response = $order_api->getOrder($event->order_id, $expansion);
