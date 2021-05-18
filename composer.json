@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "alrik11es/cowsayphp": "^1.2",,
+        "alrik11es/cowsayphp": "^1.2",
         "symfony/polyfill-mbstring": "~1.0",
         "guzzlehttp/guzzle": "~6.0",
         "ultracart/rest_api_v2_sdk_php": "*@dev"
