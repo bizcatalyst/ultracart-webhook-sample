@@ -43,11 +43,12 @@ $expansion = "checkout"; // I need to request any objects using the REST API to 
 echo "Looping through all events.  They may not all be order_create, so check what type they are.\n";
 foreach ($payload_obj->events as $event) {
     if (isset($event->order_create)) {
+        $payload_order = $event->order_create;
         echo "Found order_create event. Loading order object using REST API\n";
         echo "Loading order object using REST API\n";
-        echo "Requesting Order ID " . $event->order_id . "\n";
+        echo "Requesting Order ID " . $payload_order->order_id . "\n";
 
-        $order_response = $order_api->getOrder($event['order_id'], $expansion);
+        $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
         $order = $order_response->getOrder();
         $checkout_fields = $order->getCheckout();
 
@@ -61,7 +62,7 @@ foreach ($payload_obj->events as $event) {
                 $checkout_fields->setCustomField2('MarketingProgramA');
             }
             echo "Saving the order back to the server.\n";
-            $order_api->updateOrder($order, $event['order_id'], $expansion);
+            $order_api->updateOrder($order, $payload_order->order_id, $expansion);
         } else {
             echo "There was nothing in custom field 1, so not doing anything with this order.\n";
         }
