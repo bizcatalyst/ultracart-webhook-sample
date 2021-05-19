@@ -1,5 +1,12 @@
 # Getting Started #
 
+There are UltraCart steps needed to make this sample work.
+
+1. Generate a REST API Key.  See https://ultracart.atlassian.net/wiki/spaces/ucdoc/pages/38688545/API+Simple+Key
+2. Configure the webhook in the UltraCart backend.  You'll need your publicly visible url once the app is deployed, so you may wish to deploy this sample in digital ocean first and then configure the webhook once you have the url for the webhook script.
+https://ultracart.atlassian.net/wiki/spaces/ucdoc/pages/2236448769/PHP+SDK+Sample+Webhook+that+uses+REST+API+to+process+order
+
+
 These steps will get this sample application running for you using DigitalOcean.
 
 **Note: Following these steps will result in charges for the use of DigitalOcean services**
