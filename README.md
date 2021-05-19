@@ -53,3 +53,25 @@ This will delete the app and destroy any underlying DigitalOcean resources
 
 **Note: If you don't delete your app, charges for the use of DigitalOcean services will continue to accrue.**
 
+
+
+
+For reference, this is our app yaml that we used in our deployment at Digital Ocean.
+```yaml
+name: ultracart-sdk
+region: nyc
+services:
+- environment_slug: php
+  git:
+    branch: master
+    repo_clone_url: https://github.com/UltraCart/ultracart-webhook-sample.git
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: basic-xs
+  name: ultracart-sdk
+  routes:
+  - path: /
+  run_command: heroku-php-apache2
+  source_dir: /
+```
+
