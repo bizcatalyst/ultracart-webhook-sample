@@ -4,5 +4,5 @@ services:
   github:
     branch: master
     deploy_on_push: true
-    repo: perrytew/ultracart-webhook-sample
+    repo: UltraCart/ultracart-webhook-sample
   name: ultracart-sdk
