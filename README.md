@@ -27,7 +27,7 @@ After forking the repo, you should now be viewing this README in your own github
 1. Click "Launch App" or "Create App"
 1. Choose GitHub and authenticate with your GitHub credentials.
 1. Under Repository, choose this repository (e.g. `<your-org>/sample-php`)
-1. On the next two screens, leave all the defaults unchanged.
+1. On the next two screens, leave all the defaults unchanged except for the Environment Variables.  Edit the Environment Variables and add a variable named **API_KEY** and paste your UltraCart Rest API key as the value.  Check the Encrypt checkbox.
 1. Click "Launch App"
 1. You should see a "Building..." progress indicator. And you can click "Deployments"→"Details" to see more details of the build.
 1. It can currently take 5-6 minutes to build this app, so please be patient. Live build logs are coming soon to provide much more feedback during deployments.
