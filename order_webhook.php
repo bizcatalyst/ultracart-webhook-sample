@@ -28,17 +28,29 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
   $db->password = "";
 }
 */
+global $connString;
 $connString =  $db->getConnstring();
 
 //log msg to db
-/*
+function logMsg($msg) {
+  global $connString;
+  $sql = "insert into test_log (msg) values ('".$msg."')";
+  if (!mysqli_query($connString, $sql)) {
+    printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
+    //exit;
+  }
+}
+
+//log msg to db
 $msg="We are connected from webhook!";
-$sql = "insert into test_log (msg) values ('".$msg."')";
+logMsg($msg);
+
+$msg="Payload object";
+$sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($json)."')";
 if (!mysqli_query($connString, $sql)) {
   printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
-  //exit;
 }
-*/
+
 /*
 while( $row = mysqli_fetch_assoc($rs) ) {
   $queueTable.="<tr><td>".$row['searchPhrase']."</td><td><div style='max-height:100px;overflow-y:scroll;'>".nl2br($row['importLog']).
@@ -81,6 +93,8 @@ foreach ($payload_obj->events as $event) {
         echo "Found order_create event. Loading order object using REST API\n";
         echo "Loading order object using REST API\n";
         echo "Requesting Order ID " . $payload_order->order_id . "\n";
+        $msg="Requesting Order ID " . $payload_order->order_id . "\n";
+        logMsg($msg);
 
         // Examine the custom fields in the webhook payload, and IF I need to update the order, pull the order
         // using REST first, make changes, and then call rest update method.  Do not pass the webhook object
@@ -102,16 +116,18 @@ foreach ($payload_obj->events as $event) {
 
             // --- Start API section
             echo "Saving the order back to the server.\n";
+            logMsg("about to get the order");
             $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
+
+/*
             //log msg to db
             $msg="Full order data";
-            //$orderJSON = json_encode
             $sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($order_response)."')";
             if (!mysqli_query($connString, $sql)) {
               printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
               //exit;
             }
-
+*/
 
             //$order = $order_response->getOrder();
 
