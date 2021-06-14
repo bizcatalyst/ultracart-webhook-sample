@@ -44,14 +44,12 @@ function logMsg($msg) {
 //log msg to db
 $msg="We are connected from webhook!";
 logMsg($msg);
-exit;
 
 $msg="Payload object";
 $sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($json)."')";
 if (!mysqli_query($connString, $sql)) {
   printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
 }
-exit;
 
 /*
 while( $row = mysqli_fetch_assoc($rs) ) {
@@ -121,7 +119,6 @@ foreach ($payload_obj->events as $event) {
             logMsg("about to get the order");
             $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
 
-/*
             //log msg to db
             $msg="Full order data";
             $sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($order_response)."')";
@@ -129,7 +126,6 @@ foreach ($payload_obj->events as $event) {
               printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
               //exit;
             }
-*/
 
             //$order = $order_response->getOrder();
 
