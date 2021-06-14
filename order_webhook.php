@@ -7,6 +7,7 @@
  */
 
 require_once 'vendor/autoload.php';
+require_once 'connection.php';
 
 $json = file_get_contents('php://input');
 $payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name, value=order object.
@@ -14,6 +15,28 @@ $payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name
 $simple_key = getenv('API_KEY');
 $order_api = ultracart\v2\api\OrderApi::usingApiKey($simple_key);
 $expansion = "checkout"; // I need to request any objects using the REST API to contain the 'checkout' submodule because I'm examining the custom fields and they're located in the order/checkout sub class.
+
+//Connect to droplet db
+$db = new dbObj();
+/*
+if ($_SERVER['HTTP_HOST']=="localhost") {
+  $db->username = "root";
+  $db->password = "";
+}
+*/
+$connString =  $db->getConnstring();
+
+//log msg to db
+$msg="We are connected!";
+$sql = "import into test_log (msg) values '".$msg."'";
+mysqli_query($connString, $sql) or die("could not insert into db");
+/*
+while( $row = mysqli_fetch_assoc($rs) ) {
+  $queueTable.="<tr><td>".$row['searchPhrase']."</td><td><div style='max-height:100px;overflow-y:scroll;'>".nl2br($row['importLog']).
+                "</div></td><td>".$row['total_products']."</td><td>".$row['num_imported']."</td><td>".$row['date_added']."</td>".
+                "<td>".$row['date_started']."</td><td>".$row['date_completed']."</td></tr>";
+}
+*/
 
 /*
  Sample JSON Payload:
