@@ -9,8 +9,8 @@ Description: this defines an object which connects to a database and returns
 Class dbObj{
 	/* Database connection start */
 	var $servername = "128.199.9.231";
-	public $username = "app";
-	public $password = "4eea2aba0a90185cf370764d20fc4b1dd2d9aa996872905f";
+	public $username = "d4brands_app";
+	public $password = "vdwei90w4mDSEio342fsmklvds9#fvn_ds";
 	var $dbname = "d4brands";
 	var $conn;
 	function getConnstring() {

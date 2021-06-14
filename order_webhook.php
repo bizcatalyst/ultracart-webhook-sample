@@ -27,9 +27,12 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
 $connString =  $db->getConnstring();
 
 //log msg to db
-$msg="We are connected!";
-$sql = "import into test_log (msg) values '".$msg."'";
-mysqli_query($connString, $sql) or die("could not insert into db");
+$msg="We are connected from webhook!";
+$sql = "insert into test_log (msg) values ('".$msg."')";
+if (!mysqli_query($connString, $sql)) {
+  printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
+  exit;
+}
 /*
 while( $row = mysqli_fetch_assoc($rs) ) {
   $queueTable.="<tr><td>".$row['searchPhrase']."</td><td><div style='max-height:100px;overflow-y:scroll;'>".nl2br($row['importLog']).
