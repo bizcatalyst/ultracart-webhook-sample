@@ -44,12 +44,14 @@ function logMsg($msg) {
 //log msg to db
 $msg="We are connected from webhook!";
 logMsg($msg);
+exit;
 
 $msg="Payload object";
 $sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($json)."')";
 if (!mysqli_query($connString, $sql)) {
   printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
 }
+exit;
 
 /*
 while( $row = mysqli_fetch_assoc($rs) ) {
