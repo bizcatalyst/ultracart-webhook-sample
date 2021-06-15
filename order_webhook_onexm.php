@@ -12,15 +12,13 @@ require_once 'connection.php';
 $json = file_get_contents('php://input');
 $payload_obj = json_decode($json);  // array of key-value pairs.  key=event_name, value=order object.
 
-$simple_key = getenv('API_KEY');
+$simple_key = getenv('ONEXM_API_KEY');
 $order_api = ultracart\v2\api\OrderApi::usingApiKey($simple_key);
 $expansion = "checkout"; // I need to request any objects using the REST API to contain the 'checkout' submodule because I'm examining the custom fields and they're located in the order/checkout sub class.
 // The UltraCart objects are large.  Very large.  So we have encapsulated the fields in sub objects allowing you to
 // only request the sub objects you need.  This is done via the expansion object.   The API docs on the main web site
 // have more details about expansions:  https://www.ultracart.com/api/#expansion.html
-$expansion = "affiliate,affiliate.ledger,auto_order,billing,buysafe,channel_partner,checkout,coupon,customer_profile,".
-              "digital_order,edi,fraud_score,gift,gift_certificate,internal,item,linked_shipment,marketing,payment,".
-              "payment.transaction,quote,salesforce,shipping,summary,taxes"; // string | The object expansion to perform on the result.
+$expansion = "affiliate,affiliate.ledger,auto_order,billing,buysafe,channel_partner,checkout,coupon,customer_profile,digital_order,edi,fraud_score,gift,gift_certificate,internal,item,linked_shipment,marketing,payment,payment.transaction,quote,salesforce,shipping,summary,taxes"; // string | The object expansion to perform on the result.
 
 //Connect to droplet db
 $db = new dbObj();
@@ -30,29 +28,17 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
   $db->password = "";
 }
 */
-global $connString;
 $connString =  $db->getConnstring();
 
 //log msg to db
-function logMsg($msg) {
-  global $connString;
-  $sql = "insert into test_log (msg) values ('".$msg."')";
-  if (!mysqli_query($connString, $sql)) {
-    printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
-    //exit;
-  }
-}
-
-//log msg to db
+/*
 $msg="We are connected from webhook!";
-logMsg($msg);
-
-$msg="Payload object";
-$sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($json)."')";
+$sql = "insert into test_log (msg) values ('".$msg."')";
 if (!mysqli_query($connString, $sql)) {
   printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
+  //exit;
 }
-
+*/
 /*
 while( $row = mysqli_fetch_assoc($rs) ) {
   $queueTable.="<tr><td>".$row['searchPhrase']."</td><td><div style='max-height:100px;overflow-y:scroll;'>".nl2br($row['importLog']).
@@ -95,8 +81,6 @@ foreach ($payload_obj->events as $event) {
         echo "Found order_create event. Loading order object using REST API\n";
         echo "Loading order object using REST API\n";
         echo "Requesting Order ID " . $payload_order->order_id . "\n";
-        $msg="Requesting Order ID " . $payload_order->order_id . "\n";
-        logMsg($msg);
 
         // Examine the custom fields in the webhook payload, and IF I need to update the order, pull the order
         // using REST first, make changes, and then call rest update method.  Do not pass the webhook object
@@ -118,16 +102,16 @@ foreach ($payload_obj->events as $event) {
 
             // --- Start API section
             echo "Saving the order back to the server.\n";
-            logMsg("about to get the order");
             $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
-
             //log msg to db
             $msg="Full order data";
+            //$orderJSON = json_encode
             $sql = "insert into test_log (msg,data) values ('".$msg."','".addslashes($order_response)."')";
             if (!mysqli_query($connString, $sql)) {
               printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
               //exit;
             }
+
 
             //$order = $order_response->getOrder();
 
