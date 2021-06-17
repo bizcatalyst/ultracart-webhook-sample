@@ -31,14 +31,13 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
 $connString =  $db->getConnstring();
 
 //log msg to db
-/*
-$msg="We are connected from webhook!";
+$msg="We are connected from onexm webhook!";
 $sql = "insert into test_log (msg) values ('".$msg."')";
 if (!mysqli_query($connString, $sql)) {
   printf("Query: %s\nError message: %s\n", $sql, mysqli_error($connString));
   //exit;
 }
-*/
+
 /*
 while( $row = mysqli_fetch_assoc($rs) ) {
   $queueTable.="<tr><td>".$row['searchPhrase']."</td><td><div style='max-height:100px;overflow-y:scroll;'>".nl2br($row['importLog']).
@@ -90,8 +89,9 @@ foreach ($payload_obj->events as $event) {
         $checkout_fields = $payload_order->checkout;
 
         // if there's nothing in custom field 1, skip it.
-        if(!empty($checkout_fields->custom_field1)){
+        //if(!empty($checkout_fields->custom_field1)){
 
+        /*
             // do some kind of comparison of custom field 1 and if criteria is met, update custom field 2
             // the default is program A.  If they heard about us from a friend, use program B.
             $my_marketing_program = 'MarketingProgramA';
@@ -99,9 +99,9 @@ foreach ($payload_obj->events as $event) {
                 echo "Setting some arbitrary value in custom field 2.  This value means something to someone.\n";
                 $my_marketing_program = 'MarketingProgramB';
             }
-
-            // --- Start API section
-            echo "Saving the order back to the server.\n";
+            */
+            // --- Start API section - read only now
+            echo "Getting the order data.\n";
             $order_response = $order_api->getOrder($payload_order->order_id, $expansion);
             //log msg to db
             $msg="Full order data";
@@ -119,10 +119,11 @@ foreach ($payload_obj->events as $event) {
             //$order_api->updateOrder($order, $payload_order->order_id, $expansion);
             // --- End API section
 
+            /*
         } else {
             echo "There was nothing in custom field 1, so not doing anything with this order.\n";
         }
-
+        */
     } else {
         echo 'Event was not order_create, skipping.\n';
     }
